@@ -56,7 +56,7 @@ public class InsertVoiceTranscriptionAction extends AnAction {
 
             String textFromClipboard = "¡ERROR!";
             try {
-                String command = "/Users/rruiz/Projects/projects-sshfs/genie-server/run-genie-gui.sh record_once_on_startup=True default_mode=" + finalDefault_mode;
+                String command = "/Volumes/projects/genie-in-the-box/run-genie-gui.sh record_once_on_startup=True default_mode=" + finalDefault_mode;
 
                 event.getPresentation().setEnabled( Boolean.FALSE );
                 Process process = Runtime.getRuntime().exec( command );
