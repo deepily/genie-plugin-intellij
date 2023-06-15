@@ -11,6 +11,8 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -26,6 +28,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class InsertVoiceTranscriptionAction extends AnAction {
 
+    private static final Logger log = LoggerFactory.getLogger( InsertVoiceTranscriptionAction.class );
+    private static final com.intellij.openapi.diagnostic.Logger LOGGER = com.intellij.openapi.diagnostic.Logger.getInstance( InsertVoiceTranscriptionAction.class );
     @Override
     public void actionPerformed( @NotNull AnActionEvent event ) {
 
@@ -35,20 +39,20 @@ public class InsertVoiceTranscriptionAction extends AnAction {
 
         String default_mode = ActionManager.getInstance().getId( this );
         String menuText = event.getPresentation().getText();
-        // System.out.println( "########################################################################################" );
-        System.out.println( MessageFormat.format( "# Menu item [{0}] has ID [{1}]", menuText, default_mode ) );
-        // System.out.println( "########################################################################################" );
+        LOGGER.info( "########################################################################################" );
+        LOGGER.info( MessageFormat.format( "# Menu item [{0}] has ID [{1}]", menuText, default_mode ) );
+        LOGGER.info( "########################################################################################" );
 
-//        if ( menuText.equals( "Insert Voice to Python" ) ) {
-//            // System.out.println( "'Insert Voice to Python' called" );
-//            default_mode = "transcribe_and_clean_python";
-//        } else if ( menuText.equals( "Explain This Code or Error (Clipboard)" ) ) {
-//            System.out.println( "Explain This called (Clipboard)" );
-//            default_mode = "ai_explain_code_from_clipboard";
-//        } else {
-//            System.out.println( "'Insert Voice to Prose' called (default)" );
-//            default_mode = "transcribe_and_clean_prose";
-//        }
+        if ( menuText.equals( "Insert Voice to Python" ) ) {
+            LOGGER.info( "'Insert Voice to Python' called" );
+            default_mode = "transcribe_and_clean_python";
+        } else if ( menuText.equals( "Explain This Code or Error (Clipboard)" ) ) {
+            LOGGER.info( "Explain This called (Clipboard)" );
+            default_mode = "ai_explain_code_from_clipboard";
+        } else {
+            LOGGER.info( "'Insert Voice to Prose' called (default)" );
+            default_mode = "transcribe_and_clean_prose";
+        }
 
         // Run this code in another thread so that IDE doesn't complain about The dreaded "stop the world" blocking.
         String finalDefault_mode = ActionManager.getInstance().getId( this );
@@ -57,17 +61,17 @@ public class InsertVoiceTranscriptionAction extends AnAction {
             String textFromClipboard = "¡ERROR!";
             try {
                 String command = "/Users/rruiz/Projects/projects-sshfs/genie-in-the-box/run-genie-gui.sh record_once_on_startup=True default_mode=" + finalDefault_mode;
-
+                LOGGER.info( "Running command: [" + command + "]" );
                 event.getPresentation().setEnabled( Boolean.FALSE );
                 Process process = Runtime.getRuntime().exec( command );
                 int exitCode = process.waitFor();
-                System.out.println( "Exit code: " + exitCode );
+                LOGGER.info( "Exit code: " + exitCode );
                 event.getPresentation().setEnabled( Boolean.TRUE );
 
                 textFromClipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData( DataFlavor.stringFlavor );
 
             } catch ( Exception e) {
-//                System.out.println( "unable to load genie: " + e.toString() );
+//                LOGGER.info( "unable to load genie: " + e.toString() );
 //                e.printStackTrace();
                 throw new RuntimeException( e );
             }
@@ -117,7 +121,7 @@ public class InsertVoiceTranscriptionAction extends AnAction {
 
             // Collect the response code
             int responseCode = MyConn.getResponseCode();
-            System.out.println("GET Response Code :: " + responseCode);
+            LOGGER.info("GET Response Code :: " + responseCode);
 
             if ( responseCode == MyConn.HTTP_OK ) {
 
@@ -139,14 +143,14 @@ public class InsertVoiceTranscriptionAction extends AnAction {
             } else {
 
                 String errorMsg = String.format( "Server error code [{0}]", responseCode );
-                System.out.println( errorMsg );
+                LOGGER.info( errorMsg );
 
                 return errorMsg;
             }
         } catch(  Exception e ) {
 
             String errorMsg = String.format( "General exception caught [{0}]", e.toString() );
-            System.out.println( errorMsg );
+            LOGGER.info( errorMsg );
             e.printStackTrace();
 
             return errorMsg;

@@ -5,10 +5,10 @@
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>Genie-AI-Multiplexer-for-Idea-IDEs</name>
+    <name>Genie-in-a-Box for Idea IDEs</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="ricardo.felipe.ruiz@gmail.com" url="https://www.deepily7.ai">Deepily.ai</vendor>
+    <vendor email="42214371+deepily@users.noreply.github.com" url="https://www.deepily.ai">Deepily.ai</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
